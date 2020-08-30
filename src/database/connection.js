@@ -2,7 +2,7 @@ const knex = require("knex");
 const configuration = require("../../knexfile");
 
 const config =
-  process.env.NODE_ENV === "prod"
+  process.env.NODE_DB === "prod"
     ? configuration.production
     : configuration.development;
 
