@@ -6,7 +6,8 @@ module.exports = {
   async create(request, response) {
     try {
       const { name, email, telephone } = request.body;
-
+      
+      await MailProvider.sendMail(name, email);
       const userExists = await connection("users")
         .where("email", email)
         .select("id")
@@ -17,9 +18,7 @@ module.exports = {
           .status(203)
           .json({ message: "Este e-mail já está cadastrado!" });
       }
-
-      const mail = new MailProvider();
-      await mail.sendMail(name, email);
+      
 
       const newId = idv4.uuid();
       const data = { id: newId, name, email, telephone };

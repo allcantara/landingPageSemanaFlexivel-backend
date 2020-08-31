@@ -1,21 +1,17 @@
 const nodemailer = require("nodemailer");
 
-class MailProvider {
-  transporter = null;
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: "semanaflexivel@gmail.com",
+    pass: "semanaflexivel1234",
+  },
+});
 
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      auth: {
-        user: "semanaflexivel@gmail.com",
-        pass: "semanaflexivel1234",
-      },
-    });
-  }
-
+module.exports = {
   async sendMail(name, email) {
-    await this.transporter.sendMail({
+    await transporter.sendMail({
       from: {
         name: "Equipe Semana Flexível",
         address: "semanaflexivel@gmail.com",
@@ -29,5 +25,3 @@ class MailProvider {
     });
   }
 }
-
-module.exports = MailProvider;
