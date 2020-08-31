@@ -1,10 +1,22 @@
 const idv4 = require("uuidv4");
+const MailProvider = require("../../providers/Mail");
 const connection = require("../../../database/connection");
 
 module.exports = {
   async create(request, response) {
     try {
       const { name, email, telephone } = request.body;
+
+      const mail = new MailProvider();
+
+      const message = {
+        to: { name: "Bruno Alcantara", email: "brunoalcantarajc@gmail.com" },
+        from: { name, email },
+        subject: "Meu assunto!!!",
+        body: `<p style="color:#555;">Olá ${name}! Seja bem-vindo a nossa plataforma!</p>`,
+      };
+
+      await mail.sendMail(message);
 
       const userExists = await connection("users")
         .where("email", email)
