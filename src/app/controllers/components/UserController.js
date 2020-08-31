@@ -7,17 +7,6 @@ module.exports = {
     try {
       const { name, email, telephone } = request.body;
 
-      const mail = new MailProvider();
-
-      const message = {
-        to: { name: "Bruno Alcantara", email: "brunoalcantarajc@gmail.com" },
-        from: { name, email },
-        subject: "Meu assunto!!!",
-        body: `<p style="color:#555;">Olá ${name}! Seja bem-vindo a nossa plataforma!</p>`,
-      };
-
-      await mail.sendMail(message);
-
       const userExists = await connection("users")
         .where("email", email)
         .select("id")
@@ -28,6 +17,9 @@ module.exports = {
           .status(203)
           .json({ message: "Este e-mail já está cadastrado!" });
       }
+
+      const mail = new MailProvider();
+      await mail.sendMail(name, email);
 
       const newId = idv4.uuid();
       const data = { id: newId, name, email, telephone };
