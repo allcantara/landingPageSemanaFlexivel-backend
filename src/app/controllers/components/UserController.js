@@ -7,18 +7,18 @@ module.exports = {
     try {
       const { name, email, telephone } = request.body;
       
-      await MailProvider.sendMail(name, email);
       const userExists = await connection("users")
-        .where("email", email)
-        .select("id")
-        .first();
-
+      .where("email", email)
+      .select("id")
+      .first();
+      
       if (userExists) {
         return response
-          .status(203)
-          .json({ message: "Este e-mail já está cadastrado!" });
+        .status(203)
+        .json({ message: "Este e-mail já está cadastrado!" });
       }
       
+      await MailProvider.sendMail(name, email);
 
       const newId = idv4.uuid();
       const data = { id: newId, name, email, telephone };
